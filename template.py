@@ -13,12 +13,12 @@ import subprocess
 
 REGION_NAME= 'us-east-2'
 
-key="c:/Users/Kashmira/Projects/DataMoverTask/data.pem"
+# key="c:/Users/Kashmira/Projects/DataMoverTask/data.pem"
 
-def ec2upload(filename,companyName,project,part,variation):
-    path=os.path.join('data/',companyName,project,part,variation)
-    serverhosturl=os.path.join("ubuntu@ec2-18-204-214-171.compute-1.amazonaws.com:~",path)
-    subprocess.run(["scp","-i",key, filename, serverhosturl])
+# def ec2upload(filename,companyName,project,part,variation):
+#     path=os.path.join('data/',companyName,project,part,variation)
+#     serverhosturl=os.path.join("ubuntu@ec2-18-204-214-171.compute-1.amazonaws.com:~",path)
+#     subprocess.run(["scp","-i",key, filename, serverhosturl])
 
 
 
@@ -26,9 +26,9 @@ def ec2upload(filename,companyName,project,part,variation):
 def s3fileupload(filepath,bucketname):
     try:
         session = boto3.Session(
-        aws_access_key_id= 'AKIAXF4OGBL7KE7TS56G',
-        aws_secret_access_key= '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',
-        region_name= 'us-east-2',
+        aws_access_key_id= 'AKIAUVX277R7QICQUUPO',
+        aws_secret_access_key= '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',
+        region_name= 'ap-south-1',
     )
         s3 = session.resource('s3')
         bucket = s3.Bucket(bucketname)
@@ -121,8 +121,8 @@ def read_annotations(annotationfilepath):
 
 
 def driver(companyName, project, part, variation):
-    image_data_path = os.path.join('/home/ubuntu/data/',companyName, project, part, variation)
-    annotation_path = os.path.join('/home/ubuntu/data/',companyName, project, part, variation,'annotation')
+    image_data_path = os.path.join('/home/ec2-user/data/',companyName, project, part, variation)
+    annotation_path = os.path.join('/home/ec2-user/data/',companyName, project, part, variation,'annotation')
 
     for file in os.listdir(image_data_path):
         imagefilepath = os.path.join(image_data_path, file)
@@ -136,7 +136,7 @@ def driver(companyName, project, part, variation):
     #annotationfilepath = os.path.join(annotation_path, "PhoneDirectory_web-converted_nimbus_11_Page_01.xml")
 
     #fileurl = s3fileupload(imagefilepath, "image"/"annotations")
-    fileurl = s3fileupload(imagefilepath, "s3-annotate")
+    fileurl = s3fileupload(imagefilepath, "s3-annotate2")
 
     if os.path.exists(annotation_path):
         annotation_data,annotation_class = read_annotations(annotationfilepath)
